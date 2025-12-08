@@ -50,6 +50,12 @@
   outline: none;
 }
 
+.column-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .task-count {
   background: var(--primary-color);
   color: white;
@@ -61,11 +67,74 @@
   text-align: center;
 }
 
+.btn-delete-column {
+  background: var(--danger-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  opacity: 0.7;
+}
+
+.btn-delete-column:hover {
+  background: var(--danger-hover);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 .tasks-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 15px;
   min-height: 200px;
+  position: relative;
+}
+
+.tasks-container.drag-over {
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
+  border: 2px dashed var(--primary-color);
+}
+
+.column.drag-over {
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.drop-indicator {
+  text-align: center;
+  padding: 20px;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px dashed var(--primary-color);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.column-footer {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
 }
 

@@ -18,6 +18,22 @@ function TaskCard({ task, onUpdate, onDelete, onMove, allColumns, currentColumn 
   const [editedDeadline, setEditedDeadline] = useState(task.deadline || '')
   const [showFlagMenu, setShowFlagMenu] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleDragStart = (e) => {
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT' || e.target.closest('button') || e.target.closest('select')) {
+      e.preventDefault()
+      return
+    }
+    setIsDragging(true)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', task.id)
+    e.dataTransfer.setData('application/json', JSON.stringify({ taskId: task.id, fromColumn: currentColumn }))
+  }
+
+  const handleDragEnd = () => {
+    setIsDragging(false)
+  }
 
   const handleSave = () => {
     onUpdate(task.id, {
@@ -85,7 +101,12 @@ function TaskCard({ task, onUpdate, onDelete, onMove, allColumns, currentColumn 
   }
 
   return (
-    <div className="task-card">
+    <div 
+      className={`task-card ${isDragging ? 'dragging' : ''}`}
+      draggable={!isEditing}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       {isEditing ? (
         <div className="task-card-edit">
           <input

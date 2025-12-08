@@ -39,6 +39,26 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+.task-card[draggable="true"] {
+  cursor: grab;
+  user-select: none;
+}
+
+.task-card[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.task-card.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.task-card button,
+.task-card select {
+  cursor: pointer;
+}
+
 .task-card-header {
   display: flex;
   justify-content: space-between;

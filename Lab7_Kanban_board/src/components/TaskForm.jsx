@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import './TaskForm.css'
 
-function TaskForm({ onAddTask, columns }) {
+function TaskForm({ onAddTask, columns, defaultCategory }) {
   const [isOpen, setIsOpen] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [category, setCategory] = useState(columns[0]?.id || 'todo')
+  const [category, setCategory] = useState(defaultCategory || columns[0]?.id || 'todo')
   const [deadline, setDeadline] = useState('')
   const [flag, setFlag] = useState(null)
 
@@ -31,7 +31,7 @@ function TaskForm({ onAddTask, columns }) {
       })
       setTitle('')
       setDescription('')
-      setCategory(columns[0]?.id || 'todo')
+      setCategory(defaultCategory || columns[0]?.id || 'todo')
       setDeadline('')
       setFlag(null)
       setIsOpen(false)
@@ -41,7 +41,7 @@ function TaskForm({ onAddTask, columns }) {
   const handleCancel = () => {
     setTitle('')
     setDescription('')
-    setCategory(columns[0]?.id || 'todo')
+    setCategory(defaultCategory || columns[0]?.id || 'todo')
     setDeadline('')
     setFlag(null)
     setIsOpen(false)
@@ -49,11 +49,9 @@ function TaskForm({ onAddTask, columns }) {
 
   if (!isOpen) {
     return (
-      <div className="task-form-toggle">
-        <button className="btn-add-task" onClick={() => setIsOpen(true)}>
-          + Add New Task
-        </button>
-      </div>
+      <button className="btn-add-task-column" onClick={() => setIsOpen(true)}>
+        + Add Task
+      </button>
     )
   }
 
@@ -88,20 +86,22 @@ function TaskForm({ onAddTask, columns }) {
         />
       </div>
       
-      <div className="form-group">
-        <label htmlFor="category">Category</label>
-        <select
-          id="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          {columns.map(col => (
-            <option key={col.id} value={col.id}>
-              {col.title}
-            </option>
-          ))}
-        </select>
-      </div>
+      {!defaultCategory && (
+        <div className="form-group">
+          <label htmlFor="category">Category</label>
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {columns.map(col => (
+              <option key={col.id} value={col.id}>
+                {col.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       
       <div className="form-group">
         <label htmlFor="deadline">Deadline</label>

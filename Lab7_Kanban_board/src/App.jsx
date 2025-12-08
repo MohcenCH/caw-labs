@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Column from './components/Column'
-import TaskForm from './components/TaskForm'
 import ThemeToggle from './components/ThemeToggle'
+import AddColumn from './components/AddColumn'
 import './App.css'
 
 function App() {
@@ -61,6 +61,26 @@ function App() {
     ))
   }
 
+  const addColumn = (title) => {
+    const newColumn = {
+      id: `column-${Date.now()}`,
+      title: title || 'New Column'
+    }
+    setColumns([...columns, newColumn])
+  }
+
+  const deleteColumn = (columnId) => {
+    const columnTasks = tasks.filter(task => task.category === columnId)
+    if (columnTasks.length > 0) {
+      if (!window.confirm(`This column has ${columnTasks.length} task(s). Are you sure you want to delete it? All tasks will be removed.`)) {
+        return
+      }
+      const taskIds = columnTasks.map(task => task.id)
+      setTasks(tasks.filter(task => !taskIds.includes(task.id)))
+    }
+    setColumns(columns.filter(col => col.id !== columnId))
+  }
+
   const getTasksForColumn = (columnId) => {
     return tasks.filter(task => task.category === columnId)
   }
@@ -72,8 +92,6 @@ function App() {
         <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
       </header>
       
-      <TaskForm onAddTask={addTask} columns={columns} />
-      
       <div className="columns-container">
         {columns.map(column => (
           <Column
@@ -84,9 +102,12 @@ function App() {
             onDeleteTask={deleteTask}
             onMoveTask={moveTask}
             onUpdateColumnTitle={updateColumnTitle}
+            onDeleteColumn={deleteColumn}
+            onAddTask={addTask}
             allColumns={columns}
           />
         ))}
+        <AddColumn onAddColumn={addColumn} />
       </div>
     </div>
   )
